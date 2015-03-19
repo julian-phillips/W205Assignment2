@@ -1,7 +1,7 @@
 import numpy as np
 import pylab as pl
 import tinys3
-conn = tinys3.Connection('XXX', 'XXX')
+conn = tinys3.Connection('AKIAIUWDSESWGVSNDSCA', '5hQetAaRQ/3jDA+s6NrUwScK1CICJnJjVJdLqfoB')
 
 bucket = ('jp.mids.assignment2')
 dic = {}
