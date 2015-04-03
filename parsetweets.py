@@ -7,25 +7,32 @@ conn = tinys3.Connection('XXX', 'XXX')
 bucket = ('jp.mids.assignment2')
 tweetlist = {}
 
-jsontweets = open("tweets.txt", "r")
+#location of tweets from gettweets.py
+localdir = 'XXX'
+
+
 chunktweets = []
-for tweet in jsontweets:
-    tweet = json.loads(tweet)  
-    if tweet["lang"] <> 'en':            
-        continue
-    else:
-        chunktweets.append(tweet)
-        sentence= tweet["text"]     
-        sentence_noURL= re.sub(r'(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:\'".,<>?«»“”‘’]))', '', sentence)
-        sentence_noURL= re.sub('[-!?,";:&]+', '', sentence_noURL)
-        sentence_noURL=re.sub("(@[A-Za-z0-9]+)|([^0-9A-Za-z \t])|(\w+:\/\/\S+)","",sentence_noURL)
-        sentence_noURL=re.sub("RT","",sentence_noURL).lower()
-        words = sentence_noURL.split()
-        for word in words:
-            if word in tweetlist:
-                tweetlist[word] +=1
+
+for (dirpath,dirname,filenames)in walk(localdir):
+    for filename in filenames:
+        jsontweets = (filename, "r")
+        for tweet in jsontweets:
+            tweet = json.loads(tweet)  
+            if tweet["lang"] <> 'en':            
+                continue
             else:
-                tweetlist[word] =1
+                chunktweets.append(tweet)
+                sentence= tweet["text"]     
+                sentence_noURL= re.sub(r'(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:\'".,<>?«»“”‘’]))', '', sentence)
+                sentence_noURL= re.sub('[-!?,";:&]+', '', sentence_noURL)
+                sentence_noURL=re.sub("(@[A-Za-z0-9]+)|([^0-9A-Za-z \t])|(\w+:\/\/\S+)","",sentence_noURL)
+                sentence_noURL=re.sub("RT","",sentence_noURL).lower()
+                words = sentence_noURL.split()
+                for word in words:
+                    if word in tweetlist:
+                        tweetlist[word] +=1
+                        else:
+                            tweetlist[word] =1
 
 
 w = csv.writer(open("output.csv", "w"))
